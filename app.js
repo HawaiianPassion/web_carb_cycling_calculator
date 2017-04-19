@@ -1,7 +1,3 @@
-var APP = angular.module(my_APP, []);
-
-// APP.controller("calcController", [function(){
-
-
-
-// }]);
+var APP = angular.module(my_APP, [
+    ʻui.routerʻ
+]);
