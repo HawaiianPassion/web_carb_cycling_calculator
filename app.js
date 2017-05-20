@@ -1,12 +1,8 @@
-var APP = angular.module("my_APP", [
+var app = angular.module("my_app", [
     'ui.router'
 ]);
 
-/**
- * TODO: atomic presentational components that will accept user input as text and 
- * combo box selections and then pass data to semantic presenational component to interpret.
- */ 
-APP.component('statsForm',{
+app.component('statsForm',{
     controller: function(){
         this.height_field = "22";
         this.weight_field = "45";
@@ -30,7 +26,7 @@ APP.component('statsForm',{
         '</form>'
 });
 
-APP.component('bmrCalculator',{
+app.component('bmrCalculator',{
     controller: function(){
        this.calculateBMR = function(height, weight, age, gender){
             console.log("height: "+height);
@@ -43,17 +39,33 @@ APP.component('bmrCalculator',{
         '<stats-form calculate="$ctrl.calculateBMR(height, weight, age, gender)"></stats-form>'
 });
 
-/**
- * TODO: atomic presentational component that displays the calculated numbers
- */
+app.component('adjustedBmrCalculator',{
+    controller: function(){
+        this.calculateAdjustedBMR = function(activity_level){
+            console.log("activity_level: "+activity_level);
+        };
+    },
+    template: '<activity-level-form on-activity-level-submit="$ctrl.calculateAdjustedBMR(activity_level)"></activity-level-form>'
+});
 
-
-/**
- * TODO: atomic presentational component that displays the BMR measurements
- */
-
-
-/**
- * TODO: atomic presentational components that will accept user input as button clicks
- * to either calculate data or reset the fields.
- */ 
+app.component('activityLevelForm',{
+    controller: function(){
+        this.activity_level_field = null;
+    },
+    bindings:{
+        onActivityLevelSubmit: '&'
+    },
+    template:   
+            '<form> \
+                <select name="activity_level" ng-model="$ctrl.activity_level_field"> \
+                    <option value="">--Select Activity Level--</option> \
+                    <option value="1.0">Sedentary</option> \
+                    <option value="1.2">Very Light Activity</option> \
+                    <option value="1.4">Light Activity</option> \
+                    <option value="1.6">Moderate Activity</option> \
+                    <option value="1.8">High Activity</option> \
+                    <option value="2.0">Extreme Activity</option> \
+                </select> \
+                <input type="button" value="Calculate Adjusted BMR" ng-click="$ctrl.onActivityLevelSubmit({activity_level: $ctrl.activity_level_field})"></input> \
+            </form>'
+});
