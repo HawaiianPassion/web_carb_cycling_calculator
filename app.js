@@ -29,23 +29,25 @@ app.component('statsForm',{
 app.component('bmrCalculator',{
     controller: function(){
        this.calculateBMR = function(height, weight, age, gender){
-            console.log("height: "+height);
-            console.log("weight: "+weight);
-            console.log("age: "+age);
-            console.log("gender: "+gender);
+            if (height && weight && age && gender){
+                var bmr;
+
+                if (gender === 'male'){
+                    bmr = 66 + 13.7 * weight + 5 * height - 6.8 * age;
+                }
+                else if (gender === 'female'){
+                    bmr = 655 + 9.6 * weight + 1.7 * height - 4.7 * age;
+                }
+
+                console.log('bmr: ' + bmr);
+            }
+            else{
+                console.log('please specify all fields');
+            }
         };
     },
     template:
         '<stats-form calculate="$ctrl.calculateBMR(height, weight, age, gender)"></stats-form>'
-});
-
-app.component('adjustedBmrCalculator',{
-    controller: function(){
-        this.calculateAdjustedBMR = function(activity_level){
-            console.log("activity_level: "+activity_level);
-        };
-    },
-    template: '<activity-level-form on-activity-level-submit="$ctrl.calculateAdjustedBMR(activity_level)"></activity-level-form>'
 });
 
 app.component('activityLevelForm',{
@@ -68,4 +70,13 @@ app.component('activityLevelForm',{
                 </select> \
                 <input type="button" value="Calculate Adjusted BMR" ng-click="$ctrl.onActivityLevelSubmit({activity_level: $ctrl.activity_level_field})"></input> \
             </form>'
+});
+
+app.component('adjustedBmrCalculator',{
+    controller: function(){
+        this.calculateAdjustedBMR = function(activity_level){
+            console.log("activity_level: "+activity_level);
+        };
+    },
+    template: '<activity-level-form on-activity-level-submit="$ctrl.calculateAdjustedBMR(activity_level)"></activity-level-form>'
 });
