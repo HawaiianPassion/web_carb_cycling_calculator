@@ -1,1 +1,3 @@
-var x = 2;
+var app = angular.module("my_app", [
+    // 'ui.router'
+]);
