@@ -2,7 +2,7 @@ var app = angular.module("my_app", [
     // 'ui.router'
 ]);
 
-app.component('statsForm',{
+app.component('basicBmrForm',{
     controller: function(){
         this.height_field = "22";
         this.weight_field = "45";
@@ -26,7 +26,7 @@ app.component('statsForm',{
         '</form>'
 });
 
-app.component('bmrCalculator',{
+app.component('basicBmrCalculator',{
     controller: function(){
        this.calculateBMR = function(height, weight, age, gender){
             if (height && weight && age && gender){
@@ -47,10 +47,10 @@ app.component('bmrCalculator',{
         };
     },
     template:
-        '<stats-form calculate="$ctrl.calculateBMR(height, weight, age, gender)"></stats-form>'
+        '<basic-bmr-form calculate="$ctrl.calculateBMR(height, weight, age, gender)"></basic-bmr-form>'
 });
 
-app.component('activityLevelForm',{
+app.component('adjustedBmrLevelForm',{
     controller: function(){
         this.activity_level_field = null;
     },
@@ -78,5 +78,5 @@ app.component('adjustedBmrCalculator',{
             console.log("activity_level: "+activity_level);
         };
     },
-    template: '<activity-level-form on-activity-level-submit="$ctrl.calculateAdjustedBMR(activity_level)"></activity-level-form>'
+    template: '<adjusted-bmr-form on-activity-level-submit="$ctrl.calculateAdjustedBMR(activity_level)"></adjusted-bmr-form>'
 });
