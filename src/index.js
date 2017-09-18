@@ -2,7 +2,37 @@ var app = angular.module("my_app", [
     // 'ui.router'
 ]);
 
-app.component('basicBmrForm',{
+app.controller("main_controller",function($scope, $filter){
+    $scope.height = null;
+    $scope.weight = null;
+    $scope.age = null;
+    $scope.gender = null;
+    $scope.calculateBaseBmr = function(height, weight, age, gender){
+        height = $filter('number')(height, 2);
+        weight = $filter('number')(weight, 2);
+        age = $filter('number')(age);
+        if (height && weight && age && gender){
+            var bmr;
+
+            if (gender === 'male'){
+                bmr = 66 + 13.7 * weight + 5 * height - 6.8 * age;
+            }
+            else if (gender === 'female'){
+                bmr = 655 + 9.6 * weight + 1.7 * height - 4.7 * age;
+            }
+
+            console.log(height);
+            console.log(weight);
+            console.log(age);
+        }
+        else{
+            console.log('please specify all fields');
+        }
+    };
+    
+});
+
+/* app.component('basicBmrForm',{
     controller: function(){
         this.height_field = "22";
         this.weight_field = "45";
@@ -79,4 +109,4 @@ app.component('adjustedBmrCalculator',{
         };
     },
     template: '<adjusted-bmr-form on-activity-level-submit="$ctrl.calculateAdjustedBMR(activity_level)"></adjusted-bmr-form>'
-});
+}); */

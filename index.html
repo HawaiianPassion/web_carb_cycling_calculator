@@ -25,8 +25,19 @@
 </head>
 
 <body ng-app="my_app">
-    <bmr-calculator></bmr-calculator>
-    <adjusted-bmr-calculator></adjusted-bmr-calculator>
+    <div ng-controller="main_controller">
+        <form> 
+            <input type="text" name="height" placeholder="enter height" ng-model="height"></input>
+            <input type="text" name="weight" placeholder="enter weight" ng-model="weight"></input>
+            <input type="text" name="age" placeholder="enter age" ng-model="age"></input>
+            <select name="gender" ng-model="gender">
+                <option value="">-- Pick your gender --</option>
+                <option value="male">male</option>
+                <option value="female">female</option>
+            </select>
+            <input type="button" value="submit" ng-click="calculateBaseBmr(height, weight, age, gender)"></input>
+        </form>
+    </div>
 </body>
 
 </html>
