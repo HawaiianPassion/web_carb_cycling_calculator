@@ -3,6 +3,28 @@ var app = angular.module("my_app", [
 ]);
 
 app.controller("main_controller",function($scope, $filter){
+    var daily_macros = {
+        high: {
+            protein:null,
+            carbohydrates:null,
+            fats:null
+        },
+        moderate: {
+            protein:null,
+            carbohydrates:null,
+            fats:null
+        },
+        low: {
+            protein:null,
+            carbohydrates:null,
+            fats:null
+        }
+    };
+
+    var protein_multiplier = 4;
+    var carb_multiplier = 4;
+    var fat_multiplier = 9;
+
     $scope.height = 172.729;
     $scope.weight = 152.345;
     $scope.age = 21.45;
@@ -14,7 +36,7 @@ app.controller("main_controller",function($scope, $filter){
         // normalize the input
         height = $filter('number')(height, 2);
         weight = $filter('number')(weight, 2);
-        age = $filter('number')(age);
+        age = $filter('number')(age,0);
         activity_level = $filter('number')(activity_level, 1);
         protein = $filter('number')(protein, 2);
 
@@ -28,18 +50,32 @@ app.controller("main_controller",function($scope, $filter){
                 bmr = 655 + 9.6 * weight + 1.7 * height - 4.7 * age;
             }
 
-            console.log(height);
-            console.log(weight);
-            console.log(age);
-            console.log(activity_level);
-            console.log(goal);
-            console.log(protein);
+            // console.log(height);
+            // console.log(weight);
+            // console.log(age);
+            // console.log(activity_level);
+            // console.log(goal);
+            // console.log(protein);
+            set_protein_intake(weight,protein)
+            console.log(daily_macros);
         }
         else{
             console.log('please specify all inputs and selections');
         }
     };
-    
+   
+    var set_protein_intake = function(weight,protein){
+        if(weight && protein){
+            var intake = $filter('number')(weight * protein,0);
+            daily_macros.high.protein=intake;
+            daily_macros.moderate.protein=intake;
+            daily_macros.low.protein=intake;
+            return true
+        }
+        else{
+            return false;
+        }
+    };
 });
 
 /* app.component('basicBmrForm',{
