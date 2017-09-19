@@ -56,7 +56,9 @@ app.controller("main_controller",function($scope, $filter){
             // console.log(activity_level);
             // console.log(goal);
             // console.log(protein);
-            set_protein_intake(weight,protein)
+            if(!set_protein_intake(weight,protein)){
+                console.log("failed to calculate daily protein intake");
+            }
             console.log(daily_macros);
         }
         else{
@@ -76,6 +78,8 @@ app.controller("main_controller",function($scope, $filter){
             return false;
         }
     };
+
+
 });
 
 /* app.component('basicBmrForm',{
