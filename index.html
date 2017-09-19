@@ -49,8 +49,15 @@
                     <option value="Cut">Cut</option>
                     <option value="Maintain">Maintain</option>
                     <option value="Gain">Gain</option>
-                </select>
-            <input type="button" value="submit" ng-click="calculate(height, weight, age, gender, activity_level, goal)"></input>
+            </select>
+            <select name="protein" ng-model="protein">
+                    <option value="">--Select Protein Ratio--</option>
+                    <option value="0.80">0.8g / lbs of body weight</option>
+                    <option value="1.00">1.0g / lbs of body weight</option>
+                    <option value="1.25">1.25g / lbs of body weight</option>
+                    <option value="1.50">1.5g / lbs of body weight</option>
+            </select>
+            <input type="button" value="submit" ng-click="calculate(height, weight, age, gender, activity_level, goal, protein)"></input>
         </form>
     </div>
 </body>

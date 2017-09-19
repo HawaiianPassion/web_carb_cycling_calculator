@@ -9,12 +9,14 @@ app.controller("main_controller",function($scope, $filter){
     $scope.gender = "male";
     $scope.activity_level = "1.6";
     $scope.goal = "Gain";
-    $scope.calculate = function(height, weight, age, gender, activity_level, goal){
+    $scope.protein = "1.25";
+    $scope.calculate = function(height, weight, age, gender, activity_level, goal, protein){
         // normalize the input
         height = $filter('number')(height, 2);
         weight = $filter('number')(weight, 2);
         age = $filter('number')(age);
         activity_level = $filter('number')(activity_level, 1);
+        protein = $filter('number')(protein, 2);
 
         if (height && weight && age && gender && activity_level && goal){
             var bmr;
@@ -31,6 +33,7 @@ app.controller("main_controller",function($scope, $filter){
             console.log(age);
             console.log(activity_level);
             console.log(goal);
+            console.log(protein);
         }
         else{
             console.log('please specify all inputs and selections');
