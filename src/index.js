@@ -58,7 +58,18 @@ app.controller("main_controller",function($scope, $filter){
         else if (gender === 'female'){
             bmr = 655 + 9.6 * weight + 1.7 * height - 4.7 * age;
         }
-
+        var activity_adjusted_bmr = bmr * activity_level;
+        var goal_oriented_bmr = null;
+        if (goal === "Cut"){
+            goal_oriented_bmr = activity_adjusted_bmr - activity_adjusted_bmr*0.1;
+        }
+        else if (goal === "Gain"){
+            goal_oriented_bmr = activity_adjusted_bmr + activity_adjusted_bmr*0.1;
+        }
+        else{
+            goal_oriented_bmr = activity_adjusted_bmr;
+        }
+        console.log(goal+": "+goal_oriented_bmr );
         // console.log(height);
         // console.log(weight);
         // console.log(age);
@@ -110,5 +121,9 @@ app.controller("main_controller",function($scope, $filter){
             daily_macros.low.carbohydrates = moderate;
         }
         return true;
-    }
+    };
+
+    // var set_fat_intake = function(){
+    //     var intake = 
+    // };
 });
