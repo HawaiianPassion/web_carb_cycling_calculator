@@ -3,15 +3,20 @@ var app = angular.module("my_app", [
 ]);
 
 app.controller("main_controller",function($scope, $filter){
-    $scope.height = null;
-    $scope.weight = null;
-    $scope.age = null;
-    $scope.gender = null;
-    $scope.calculateBaseBmr = function(height, weight, age, gender){
+    $scope.height = 172.729;
+    $scope.weight = 152.345;
+    $scope.age = 21.45;
+    $scope.gender = "male";
+    $scope.activity_level = "1.6";
+    $scope.goal = "Gain";
+    $scope.calculate = function(height, weight, age, gender, activity_level, goal){
+        // normalize the input
         height = $filter('number')(height, 2);
         weight = $filter('number')(weight, 2);
         age = $filter('number')(age);
-        if (height && weight && age && gender){
+        activity_level = $filter('number')(activity_level, 1);
+
+        if (height && weight && age && gender && activity_level && goal){
             var bmr;
 
             if (gender === 'male'){
@@ -24,9 +29,11 @@ app.controller("main_controller",function($scope, $filter){
             console.log(height);
             console.log(weight);
             console.log(age);
+            console.log(activity_level);
+            console.log(goal);
         }
         else{
-            console.log('please specify all fields');
+            console.log('please specify all inputs and selections');
         }
     };
     

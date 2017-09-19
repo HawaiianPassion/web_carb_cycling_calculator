@@ -35,7 +35,22 @@
                 <option value="male">male</option>
                 <option value="female">female</option>
             </select>
-            <input type="button" value="submit" ng-click="calculateBaseBmr(height, weight, age, gender)"></input>
+            <select name="activity_level" ng-model="activity_level">
+                <option value="">--Select Activity Level--</option>
+                <option value="1.0">Sedentary</option>
+                <option value="1.2">Very Light Activity</option>
+                <option value="1.4">Light Activity</option>
+                <option value="1.6">Moderate Activity</option>
+                <option value="1.8">High Activity</option>
+                <option value="2.0">Extreme Activity</option>
+            </select>
+            <select name="goal" ng-model="goal">
+                    <option value="">--Select Goal--</option>
+                    <option value="Cut">Cut</option>
+                    <option value="Maintain">Maintain</option>
+                    <option value="Gain">Gain</option>
+                </select>
+            <input type="button" value="submit" ng-click="calculate(height, weight, age, gender, activity_level, goal)"></input>
         </form>
     </div>
 </body>
