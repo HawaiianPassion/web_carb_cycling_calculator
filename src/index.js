@@ -26,9 +26,9 @@ app.controller("main_controller",function($scope, $filter){
     var carb_multiplier = 4;
     var fat_multiplier = 9;
 
-    $scope.height = 172.729;
+    $scope.height = 178;
     $scope.weight = 99.7903;
-    $scope.age = 21.45;
+    $scope.age = 30;
     $scope.gender = "male";
     $scope.activity_level = "1.6";
     $scope.goal = "Gain";
@@ -45,12 +45,13 @@ app.controller("main_controller",function($scope, $filter){
         }
 
         // normalize the input
-        height = $filter('number')(height, 2);
-        weight = $filter('number')(weight, 2);
-        age = $filter('number')(age,0);
-        activity_level = $filter('number')(activity_level, 1);
-        protein = $filter('number')(protein, 2);
+        height = parseFloat(Number(height).toFixed(2));
+        weight = parseFloat(Number(weight).toFixed(2))
+        age = parseInt(Number(age));
+        activity_level = parseFloat(Number(activity_level));
+        protein = parseFloat(Number(protein).toFixed(3));
         
+        // calculate the basic bmr
         var bmr;
         if (gender === 'male'){
             bmr = 66 + 13.7 * weight + 5 * height - 6.8 * age;
@@ -58,24 +59,17 @@ app.controller("main_controller",function($scope, $filter){
         else if (gender === 'female'){
             bmr = 655 + 9.6 * weight + 1.7 * height - 4.7 * age;
         }
-        var activity_adjusted_bmr = bmr * activity_level;
-        var goal_oriented_bmr = null;
+
+        // calculate the goal-oriented bmr
+        var goal_oriented_bmr = parseInt(bmr * activity_level); // if the goal was to maintain, then we only need to apply the activity level adjustment
         if (goal === "Cut"){
-            goal_oriented_bmr = activity_adjusted_bmr - activity_adjusted_bmr*0.1;
+            goal_oriented_bmr = goal_oriented_bmr - goal_oriented_bmr*0.2;
         }
         else if (goal === "Gain"){
-            goal_oriented_bmr = activity_adjusted_bmr + activity_adjusted_bmr*0.1;
+            goal_oriented_bmr = goal_oriented_bmr + goal_oriented_bmr*0.2;
         }
-        else{
-            goal_oriented_bmr = activity_adjusted_bmr;
-        }
-        console.log(goal+": "+goal_oriented_bmr );
-        // console.log(height);
-        // console.log(weight);
-        // console.log(age);
-        // console.log(activity_level);
-        // console.log(goal);
-        // console.log(protein);
+
+        // set the daily macros
         if(!set_protein_intake(weight * kg_to_lbs_multiplier,protein)){
             console.log("failed to calculate daily protein intake");
             return;
@@ -84,6 +78,11 @@ app.controller("main_controller",function($scope, $filter){
             console.log("failed to calculate daily carbohydrate intake");
             return;
         }
+        if(!set_fat_intake(daily_macros.moderate.protein,daily_macros.moderate.carbohydrates,goal_oriented_bmr)){
+            console.log("failed to calculate daily fat intake");
+            return;
+        }
+        // display
         console.log(daily_macros);
     };
    
@@ -91,7 +90,7 @@ app.controller("main_controller",function($scope, $filter){
         if(!(weight && protein)){
             return false;
         }
-        var intake = $filter('number')(weight * protein,0);
+        var intake = parseInt(weight * protein);
         daily_macros.high.protein=intake;
         daily_macros.moderate.protein=intake;
         daily_macros.low.protein=intake;
@@ -104,18 +103,17 @@ app.controller("main_controller",function($scope, $filter){
         }
         var moderate = daily_macros.moderate.protein;;
         if (goal === "Cut"){
-            moderate = 1.25*weight;
-            daily_macros.moderate.carbohydrates = $filter('number')(moderate,0);
-            daily_macros.high.carbohydrates = $filter('number')(moderate*1.25,0);
-            daily_macros.low.carbohydrates = $filter('number')(moderate*0.75,0);
+            moderate = parseInt(1.25*weight);
+            daily_macros.moderate.carbohydrates = moderate; //$filter('number')(moderate,0);
+            daily_macros.high.carbohydrates = parseInt(moderate*1.25);//$filter('number')(moderate*1.25,0);
+            daily_macros.low.carbohydrates = parseInt(moderate*0.75);//$filter('number')(moderate*0.75,0);
         }
         if (goal === "Gain"){
-            daily_macros.moderate.carbohydrates = $filter('number')(moderate,0);
-            daily_macros.high.carbohydrates = $filter('number')(moderate*1.25,0);
-            daily_macros.low.carbohydrates = $filter('number')(moderate*0.75,0);
+            daily_macros.moderate.carbohydrates = moderate//$filter('number')(moderate,0);
+            daily_macros.high.carbohydrates = parseInt(moderate*1.25);//$filter('number')(moderate*1.25,0);
+            daily_macros.low.carbohydrates = parseInt(moderate*0.75);//$filter('number')(moderate*0.75,0);
         }
         else{
-            moderate = $filter('number')(moderate,0);
             daily_macros.moderate.carbohydrates = moderate;
             daily_macros.high.carbohydrates = moderate;
             daily_macros.low.carbohydrates = moderate;
@@ -123,7 +121,14 @@ app.controller("main_controller",function($scope, $filter){
         return true;
     };
 
-    // var set_fat_intake = function(){
-    //     var intake = 
-    // };
+    var set_fat_intake = function(protein, carbohydrates, bmr){
+        if (!(protein && carbohydrates && bmr)){
+            return false;
+        }
+        var intake = parseInt((bmr - 4 * (protein + carbohydrates))/9);
+        daily_macros.moderate.fats = intake;
+        daily_macros.high.fats = intake;
+        daily_macros.low.fats = intake;
+        return true;
+    };
 });
