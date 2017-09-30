@@ -3,6 +3,7 @@ var app = angular.module("my_app", [
 ]);
 
 app.controller("main_controller",function($scope, $filter){
+    // the object model for the daily macronutrient intake
     var daily_macros = {
         high: {
             protein:null,
@@ -21,11 +22,13 @@ app.controller("main_controller",function($scope, $filter){
         }
     };
 
+    // multipliers used in calculation
     var kg_to_lbs_multiplier = 2.2;
     var protein_multiplier = 4;
     var carb_multiplier = 4;
     var fat_multiplier = 9;
 
+    // scope variables (set to initialy values)
     $scope.height = 178;
     $scope.weight = 99.7903;
     $scope.age = 30;
@@ -34,7 +37,8 @@ app.controller("main_controller",function($scope, $filter){
     $scope.goal = "Gain";
     $scope.protein = "1.50";
     
-    $scope.calculate = function(height, weight, age, gender, activity_level, goal, protein){
+    //Using the measurements and pereferences provided, calculate the daily macronutrient intake
+    $scope.calculate_daily_intake = function(height, weight, age, gender, activity_level, goal, protein){
         if (!(height && weight && age && gender && activity_level && goal && protein)){
             console.log('please specify all inputs and selections');
             return;
@@ -74,6 +78,13 @@ app.controller("main_controller",function($scope, $filter){
         console.log(daily_macros);
     };
    
+    /**
+     * calculate the users regular BMR
+     * @param {number} weight 
+     * @param {number} height 
+     * @param {number} age 
+     * @param {string} gender 
+     */
     var set_regular_bmr = function(weight,height,age,gender){
         if(!(weight && height && age)){
             return null;
@@ -86,6 +97,12 @@ app.controller("main_controller",function($scope, $filter){
         }
     };
 
+    /**
+     * calculate the users BMR adjusted by their body mass goal
+     * @param {number} bmr 
+     * @param {number} activity_level 
+     * @param {string} goal 
+     */
     var set_goal_bmr = function(bmr,activity_level,goal){
         if(!(bmr,activity_level)){
             return null;
@@ -102,6 +119,11 @@ app.controller("main_controller",function($scope, $filter){
         }
     };
 
+    /**
+     * calculate and set the grams of protein that should be consumed on each type of day
+     * @param {number} weight 
+     * @param {number} protein 
+     */
     var set_protein_intake = function(weight,protein){
         if(!(weight && protein)){
             return false;
@@ -113,6 +135,11 @@ app.controller("main_controller",function($scope, $filter){
         return true
     };
 
+    /**
+     * calculate and set the grams of carbohydrates that should be consumed on each type of day
+     * @param {number} weight 
+     * @param {string} goal 
+     */
     var set_carbohydrate_intake = function(weight,goal){
         if(!(weight && goal)){
             return false;
@@ -137,6 +164,12 @@ app.controller("main_controller",function($scope, $filter){
         return true;
     };
 
+    /**
+     * calculate and set the grams of fat that should be consumed on each type of day
+     * @param {number} protein 
+     * @param {number} carbohydrates 
+     * @param {number} bmr 
+     */
     var set_fat_intake = function(protein, carbohydrates, bmr){
         if (!(protein && carbohydrates && bmr)){
             return false;
